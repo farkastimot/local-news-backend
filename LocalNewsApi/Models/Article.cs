@@ -7,7 +7,6 @@ namespace LocalNewsApi.Models
 {
     public class Article
     {
-        private ArticleContext articleContext;
         public int Id { get; set; }
         public string Author { get; set; }
         public int Category { get; set; }
