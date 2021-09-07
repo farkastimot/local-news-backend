@@ -11,14 +11,6 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class AllArticlesController : ControllerBase
     {
-
-        public IActionResult Index()
-        {
-            ArticleContext articleContext = HttpContext.RequestServices.GetService(typeof(ArticleContext)) as ArticleContext;
-            
-            return Content(articleContext.GetAllArticles()[0].Title);
-        }
-
         [HttpGet]
         public IEnumerable<Article> Get()
         {
