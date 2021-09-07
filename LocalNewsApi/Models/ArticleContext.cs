@@ -32,17 +32,20 @@ namespace LocalNewsApi.Models
 
                 using (var reader = cmd.ExecuteReader())
                 {
-                    articles.Add(new Article()
+                    while (reader.Read())
                     {
-                        Id = Convert.ToInt32(reader["id"]),
-                        Author = reader["author"].ToString(),
-                        Category = Convert.ToInt32(reader["category"]),
-                        Title = reader["title"].ToString(),
-                        Description = reader["description"].ToString(),
-                        UrlToImage = reader["urlToImage"].ToString(),
-                        PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
-                        Content = reader["content"].ToString()
-                    });
+                        articles.Add(new Article()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Author = reader["author"].ToString(),
+                            Category = Convert.ToInt32(reader["category"]),
+                            Title = reader["title"].ToString(),
+                            Description = reader["description"].ToString(),
+                            UrlToImage = reader["urlToImage"].ToString(),
+                            PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
+                            Content = reader["content"].ToString()
+                        });
+                    }
                 }
             }
 
