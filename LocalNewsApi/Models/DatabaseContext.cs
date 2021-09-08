@@ -80,5 +80,32 @@ namespace LocalNewsApi.Models
 
             return categories;
         }
+
+        public List<Category> GetCategoryByID(int id)
+        {
+            List<Category> category = new List<Category>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM categories WHERE id=@Id LIMIT 1", conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        category.Add(new Category()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Name = reader["name"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return category;
+        }
     }
 }

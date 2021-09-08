@@ -13,11 +13,19 @@ namespace LocalNewsApi.Controllers
     public class CategoriesController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Category> Index()
+        public IEnumerable<Category> GetAll()
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
             return articleContext.GetAllCategories().ToArray();
+        }
+
+        [HttpGet("{id:int}")]
+        public IEnumerable<Category> GetByID(int id)
+        {
+            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+
+            return articleContext.GetCategoryByID(id).ToArray();
         }
 
         // GET: CategoriesController
