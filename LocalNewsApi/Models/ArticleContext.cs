@@ -20,6 +20,7 @@ namespace LocalNewsApi.Models
             return new MySqlConnection(ConnectionString);
         }
 
+        // --------------------------------------------------------------------------------------------------------------- ARTICLES
         public List<Article> GetAllArticles()
         {
             List<Article> articles = new List<Article>();
@@ -50,6 +51,34 @@ namespace LocalNewsApi.Models
             }
 
             return articles;
+        }
+
+        // --------------------------------------------------------------------------------------------------------------- CATEGORIES
+        public List<Category> GetAllCategories()
+        {
+            List<Category> categories = new List<Category>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM categories", conn);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        categories.Add(new Category()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Name = reader["name"].ToString()
+                        });
+                    }
+                }
+            }
+
+
+            return categories;
         }
     }
 }
