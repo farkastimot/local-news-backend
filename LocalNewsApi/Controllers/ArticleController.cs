@@ -9,14 +9,14 @@ namespace LocalNewsApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AllArticlesController : ControllerBase
+    public class ArticleController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<Article> Get()
+        [HttpGet("{id:int}")]
+        public IEnumerable<Article> GetArticle(int id)
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetArticles("", 0, 0, false, 0, true).ToArray();
+            return articleContext.GetSingleArticle(id).ToArray();
         }
     }
 }

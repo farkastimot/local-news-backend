@@ -9,14 +9,14 @@ namespace LocalNewsApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AllArticlesController : ControllerBase
+    public class SearchController : Controller
     {
         [HttpGet]
-        public IEnumerable<Article> Get()
+        public IEnumerable<Article> Search(string q, int category, int page, int amount)
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetArticles("", 0, 0, false, 0, true).ToArray();
+            return articleContext.GetArticles((q == null ? "" : q), category, page, false, (amount == 0 ? 10 : amount)).ToArray();
         }
     }
 }

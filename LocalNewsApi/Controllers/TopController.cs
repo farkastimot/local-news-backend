@@ -9,14 +9,15 @@ namespace LocalNewsApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AllArticlesController : ControllerBase
+    public class TopController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Article> Get()
+        public IEnumerable<Article> GetTop(int category, int page, int amount)
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetArticles("", 0, 0, false, 0, true).ToArray();
+            //return articleContext.GetTopArticles(category, page, (amount==0?10:amount)).ToArray();
+            return articleContext.GetArticles("", category, page, true, (amount == 0 ? 10 : amount)).ToArray();
         }
     }
 }
