@@ -21,8 +21,7 @@ namespace LocalNewsApi.Models
         }
 
         // --------------------------------------------------------------------------------------------------------------- ARTICLES
-        //  Get all of the articles
-        public List<Article> GetAllArticles()
+        public List<Article> GetArticles(string searchTerm, int category, int page, bool top = false, int amount=10, bool all=false)
         {
             List<Article> articles = new List<Article>();
 
@@ -30,47 +29,29 @@ namespace LocalNewsApi.Models
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM articles;", conn);
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        articles.Add(new Article()
-                        {
-                            Id = Convert.ToInt32(reader["id"]),
-                            Author = reader["author"].ToString(),
-                            Category = Convert.ToInt32(reader["category"]),
-                            Title = reader["title"].ToString(),
-                            Description = reader["description"].ToString(),
-                            UrlToImage = reader["urlToImage"].ToString(),
-                            PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
-                            Content = reader["content"].ToString()
-                        });
-                    }
-                }
-            }
-
-            return articles;
-        }
-
-        //  get top news
-        public List<Article> GetTopArticles(int category, int page, int amount)
-        {
-            List<Article> articles = new List<Article>();
-
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-
-                string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles WHERE TIMESTAMPDIFF(DAY,`publishedAt`,now()) < 30";
-                if (category != 0) sqlCommand += " AND `category` = @Category ";
-                sqlCommand += " ORDER BY `publishedAt` DESC LIMIT @Limit ";
-                if (page != 0) sqlCommand += " OFFSET "+(page*10).ToString()+" ";
+                //Build our sql query
+                string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles WHERE ";
+                //if we need the top articles only select from the last 7 days
+                if (top) sqlCommand += "TIMESTAMPDIFF(DAY,`publishedAt`, now()) < 30";
+                //If we need to add a category, add a category
+                if (category != 0) sqlCommand += (top?" AND ":" ") + "`category` = @Category ";
+                //Search if we have a search term (in title, description and content)
+                if (searchTerm != "") sqlCommand += (top || category != 0 ? " AND " : " ") + " (CONTAINS(title, @TitleSearch) OR CONTAINS(description, @DescSearch) OR CONTAINS(content, @ContentSearch)) ";
+                //Add the limit (all the time)
+                sqlCommand += (searchTerm!=""?"": " ORDER BY `publishedAt` DESC ") + " LIMIT @Limit ";
+                if (page != 0) sqlCommand += " OFFSET " + (page * 10).ToString() + " ";
                 sqlCommand += ";";
+                //JUST GET IT ALL INSTEAD
+                if (all) sqlCommand = "SELECT * FROM articles;";
 
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
-                cmd.Parameters.AddWithValue("@Category", category);
+                if (category != 0) cmd.Parameters.AddWithValue("@Category", category);
+                if (searchTerm != "")
+                {
+                    cmd.Parameters.AddWithValue("@TitleSearch", searchTerm);
+                    cmd.Parameters.AddWithValue("@DescSearch", searchTerm);
+                    cmd.Parameters.AddWithValue("@ContentSearch", searchTerm);
+                }
                 cmd.Parameters.AddWithValue("@Limit", amount);
 
                 using (var reader = cmd.ExecuteReader())

@@ -16,7 +16,7 @@ namespace LocalNewsApi.Controllers
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetAllArticles().ToArray();
+            return articleContext.GetArticles("", 0, 0, false, 0, true).ToArray();
         }
     }
 }
