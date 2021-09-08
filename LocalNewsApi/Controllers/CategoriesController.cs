@@ -17,7 +17,7 @@ namespace LocalNewsApi.Controllers
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetAllCategories().ToArray();
+            return articleContext.GetCategories().ToArray();
         }
 
         [HttpGet("{id:int}")]
@@ -25,7 +25,7 @@ namespace LocalNewsApi.Controllers
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetCategoryByID(id).ToArray();
+            return articleContext.GetCategories(id).ToArray();
         }
 
         // GET: CategoriesController

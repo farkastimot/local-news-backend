@@ -79,7 +79,7 @@ namespace LocalNewsApi.Models
         }
 
         // --------------------------------------------------------------------------------------------------------------- CATEGORIES
-        public List<Category> GetAllCategories()
+        public List<Category> GetCategories(int id=0)
         {
             List<Category> categories = new List<Category>();
 
@@ -87,7 +87,14 @@ namespace LocalNewsApi.Models
             {
                 conn.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM categories", conn);
+                string sqlCommand = "SELECT * FROM categories";
+                if (id != 0)
+                {
+                    sqlCommand += " WHERE id = @Id LIMIT 1";
+                }
+
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@Id", id);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -104,33 +111,6 @@ namespace LocalNewsApi.Models
 
 
             return categories;
-        }
-
-        public List<Category> GetCategoryByID(int id)
-        {
-            List<Category> category = new List<Category>();
-
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM categories WHERE id=@Id LIMIT 1", conn);
-                cmd.Parameters.AddWithValue("@Id", id);
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        category.Add(new Category()
-                        {
-                            Id = Convert.ToInt32(reader["id"]),
-                            Name = reader["name"].ToString()
-                        });
-                    }
-                }
-            }
-
-            return category;
         }
     }
 }
