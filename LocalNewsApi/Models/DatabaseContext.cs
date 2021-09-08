@@ -21,6 +21,7 @@ namespace LocalNewsApi.Models
         }
 
         // --------------------------------------------------------------------------------------------------------------- ARTICLES
+        //  Get all of the articles
         public List<Article> GetAllArticles()
         {
             List<Article> articles = new List<Article>();
@@ -45,6 +46,46 @@ namespace LocalNewsApi.Models
                             UrlToImage = reader["urlToImage"].ToString(),
                             PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
                             Content = reader["content"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return articles;
+        }
+
+        //  get top news
+        public List<Article> GetTopArticles(int category, int page)
+        {
+            List<Article> articles = new List<Article>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles WHERE TIMESTAMPDIFF(DAY,`publishedAt`,now()) < 30";
+                if (category != 0) sqlCommand += " AND `category` = @Category ";
+                sqlCommand += " ORDER BY `publishedAt` DESC LIMIT 10 ";
+                if (page != 0) sqlCommand += " OFFSET "+(page*10).ToString()+" ";
+                sqlCommand += ";";
+
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@Category", category);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        articles.Add(new Article()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Author = "",
+                            Category = Convert.ToInt32(reader["category"]),
+                            Title = reader["title"].ToString(),
+                            Description = reader["description"].ToString(),
+                            UrlToImage = reader["urlToImage"].ToString(),
+                            PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
+                            Content = ""
                         });
                     }
                 }
