@@ -37,7 +37,7 @@ namespace LocalNewsApi.Models
                 //If we need to add a category, add a category
                 if (category != 0) sqlCommand += (top?" AND ":" ") + "`category` = @Category ";
                 //Search if we have a search term (in title, description and content)
-                if (searchTerm != "") sqlCommand += (top || category != 0 ? " AND " : " ") + " (CONTAINS(title, @TitleSearch) OR CONTAINS(description, @DescSearch) OR CONTAINS(content, @ContentSearch)) ";
+                if (searchTerm != "") sqlCommand += (top || category != 0 ? " AND " : " ") + " (title LIKE @TitleSearch) OR (description LIKE @DescSearch) OR (content LIKE @ContentSearch) ";
                 //Add the limit (all the time)
                 sqlCommand += (searchTerm!=""?"": " ORDER BY `publishedAt` DESC ") + " LIMIT @Limit ";
                 if (page != 0) sqlCommand += " OFFSET " + (page * 10).ToString() + " ";
@@ -49,11 +49,12 @@ namespace LocalNewsApi.Models
                 if (category != 0) cmd.Parameters.AddWithValue("@Category", category);
                 if (searchTerm != "")
                 {
-                    cmd.Parameters.AddWithValue("@TitleSearch", searchTerm);
-                    cmd.Parameters.AddWithValue("@DescSearch", searchTerm);
-                    cmd.Parameters.AddWithValue("@ContentSearch", searchTerm);
+                    cmd.Parameters.AddWithValue("@TitleSearch", "%"+searchTerm+"%");
+                    cmd.Parameters.AddWithValue("@DescSearch", "%" + searchTerm + "%");
+                    cmd.Parameters.AddWithValue("@ContentSearch", "%" + searchTerm + "%");
                 }
                 cmd.Parameters.AddWithValue("@Limit", amount);
+
 
                 using (var reader = cmd.ExecuteReader())
                 {
