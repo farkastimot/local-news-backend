@@ -30,7 +30,8 @@ namespace LocalNewsApi.Models
                 conn.Open();
 
                 //Build our sql query
-                string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles WHERE ";
+                string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles ";
+                if (top || category != 0 || searchTerm != "") sqlCommand += "WHERE ";
                 //if we need the top articles only select from the last 7 days
                 if (top) sqlCommand += "TIMESTAMPDIFF(DAY,`publishedAt`, now()) < 30";
                 //If we need to add a category, add a category
