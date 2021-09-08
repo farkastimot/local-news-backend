@@ -12,11 +12,11 @@ namespace LocalNewsApi.Controllers
     public class TopController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Article> GetTop(int category, int page)
+        public IEnumerable<Article> GetTop(int category, int page, int amount)
         {
             DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
-            return articleContext.GetTopArticles(category, page).ToArray();
+            return articleContext.GetTopArticles(category, page, (amount==0?10:amount)).ToArray();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace LocalNewsApi.Models
         }
 
         //  get top news
-        public List<Article> GetTopArticles(int category, int page)
+        public List<Article> GetTopArticles(int category, int page, int amount)
         {
             List<Article> articles = new List<Article>();
 
@@ -65,12 +65,13 @@ namespace LocalNewsApi.Models
 
                 string sqlCommand = "SELECT id, category, title, description, urlToImage, publishedAt FROM articles WHERE TIMESTAMPDIFF(DAY,`publishedAt`,now()) < 30";
                 if (category != 0) sqlCommand += " AND `category` = @Category ";
-                sqlCommand += " ORDER BY `publishedAt` DESC LIMIT 10 ";
+                sqlCommand += " ORDER BY `publishedAt` DESC LIMIT @Limit ";
                 if (page != 0) sqlCommand += " OFFSET "+(page*10).ToString()+" ";
                 sqlCommand += ";";
 
                 MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
                 cmd.Parameters.AddWithValue("@Category", category);
+                cmd.Parameters.AddWithValue("@Limit", amount);
 
                 using (var reader = cmd.ExecuteReader())
                 {
