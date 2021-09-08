@@ -6,11 +6,11 @@ using MySql.Data.MySqlClient;
 
 namespace LocalNewsApi.Models
 {
-    public class ArticleContext
+    public class DatabaseContext
     {
         public string ConnectionString { get; set; }
 
-        public ArticleContext(string connectionString)
+        public DatabaseContext(string connectionString)
         {
             ConnectionString = connectionString;
         }

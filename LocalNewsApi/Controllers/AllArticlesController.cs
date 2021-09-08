@@ -14,7 +14,7 @@ namespace LocalNewsApi.Controllers
         [HttpGet]
         public IEnumerable<Article> Get()
         {
-            ArticleContext articleContext = HttpContext.RequestServices.GetService(typeof(ArticleContext)) as ArticleContext;
+            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
             return articleContext.GetAllArticles().ToArray();
         }

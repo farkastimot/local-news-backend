@@ -15,7 +15,7 @@ namespace LocalNewsApi.Controllers
         [HttpGet]
         public IEnumerable<Category> Index()
         {
-            ArticleContext articleContext = HttpContext.RequestServices.GetService(typeof(ArticleContext)) as ArticleContext;
+            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
 
             return articleContext.GetAllCategories().ToArray();
         }
