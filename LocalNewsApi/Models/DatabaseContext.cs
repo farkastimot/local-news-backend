@@ -63,13 +63,50 @@ namespace LocalNewsApi.Models
                         articles.Add(new Article()
                         {
                             Id = Convert.ToInt32(reader["id"]),
-                            Author = "",
+                            Author = "ONLY AVAILABLE FOR FULL ARTICLE",
                             Category = Convert.ToInt32(reader["category"]),
                             Title = reader["title"].ToString(),
                             Description = reader["description"].ToString(),
                             UrlToImage = reader["urlToImage"].ToString(),
                             PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
-                            Content = ""
+                            Content = "ONLY AVAILABLE FOR FULL ARTICLE"
+                        });
+                    }
+                }
+            }
+
+            return articles;
+        }
+
+        public List<Article> GetSingleArticle(int id)
+        {
+            List<Article> articles = new List<Article>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+
+                //Build our sql query
+                string sqlCommand = "SELECT * FROM articles WHERE id = @Id;";
+
+                MySqlCommand cmd = new MySqlCommand(sqlCommand, conn);
+                cmd.Parameters.AddWithValue("@Id", id);
+
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        articles.Add(new Article()
+                        {
+                            Id = Convert.ToInt32(reader["id"]),
+                            Author = reader["author"].ToString(),
+                            Category = Convert.ToInt32(reader["category"]),
+                            Title = reader["title"].ToString(),
+                            Description = reader["description"].ToString(),
+                            UrlToImage = reader["urlToImage"].ToString(),
+                            PublishedAt = Convert.ToDateTime(reader["publishedAt"]),
+                            Content = reader["content"].ToString()
                         });
                     }
                 }
