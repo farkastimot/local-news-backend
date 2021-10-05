@@ -1,9 +1,8 @@
-﻿using LocalNewsApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using LocalNewsApi.Data;
+using LocalNewsApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LocalNewsApi.Controllers
 {
@@ -14,10 +13,9 @@ namespace LocalNewsApi.Controllers
         [HttpGet]
         public IEnumerable<Article> GetTop(int category, int page, int amount)
         {
-            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
 
-            //return articleContext.GetTopArticles(category, page, (amount==0?10:amount)).ToArray();
-            return articleContext.GetArticles("", category, page, true, (amount == 0 ? 10 : amount)).ToArray();
+            return articleContext.Articles.Skip(page * amount).Take(amount).Where(x => x.Category == category);
         }
     }
 }
