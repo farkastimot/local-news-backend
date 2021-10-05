@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LocalNewsApi.Data;
+using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +20,11 @@ namespace LocalNewsApi.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public IEnumerable<Category> GetByID(int id)
+        public IEnumerable<Article> GetByID(int id)
         {
             LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
 
-            return (IEnumerable<Category>)articleContext.Categories.Find(id);
+            return articleContext.Articles.Where(x => x.Category == id);
         }
     }
 }
