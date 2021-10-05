@@ -1,10 +1,8 @@
-﻿using LocalNewsApi.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LocalNewsApi.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LocalNewsApi.Controllers
 {
@@ -15,17 +13,17 @@ namespace LocalNewsApi.Controllers
         [HttpGet]
         public IEnumerable<Category> GetAll()
         {
-            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
 
-            return articleContext.GetCategories().ToArray();
+            return articleContext.Categories;
         }
 
         [HttpGet("{id:int}")]
         public IEnumerable<Category> GetByID(int id)
         {
-            DatabaseContext articleContext = HttpContext.RequestServices.GetService(typeof(DatabaseContext)) as DatabaseContext;
+            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
 
-            return articleContext.GetCategories(id).ToArray();
+            return (IEnumerable<Category>)articleContext.Categories.Find(id);
         }
     }
 }
