@@ -10,11 +10,11 @@ namespace LocalNewsApi.Controllers
     public class ArticleController : ControllerBase
     {
         [HttpGet("{id:int}")]
-        public IEnumerable<Article> GetArticle(int id)
+        public Article GetArticle(int id)
         {
             LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
 
-            return (IEnumerable<Article>)articleContext.Articles.Find(id);
+            return articleContext.Articles.Find(id);
         }
     }
 }
