@@ -16,7 +16,7 @@ namespace LocalNewsApi.Controllers
             LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
             if (page == null) page = 0;
             if (amount == null) amount = 10;
-            return articleContext.Articles.Skip((int)page * (int)amount).Take((int)amount).Where(x => x.Category == category);
+            return articleContext.Articles.Where(x => x.Category == category).Skip((int)page * (int)amount).Take((int)amount);
         }
     }
 }
