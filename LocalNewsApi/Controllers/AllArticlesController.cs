@@ -9,12 +9,17 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class AllArticlesController : ControllerBase
     {
+        private readonly LocalNewsContext _context;
+
+        public AllArticlesController(LocalNewsContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IEnumerable<Article> Get()
         {
-            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
-
-            return articleContext.Articles;
+            return _context.Articles;
         }
     }
 }
