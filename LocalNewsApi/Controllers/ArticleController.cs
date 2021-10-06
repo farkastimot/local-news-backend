@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using LocalNewsApi.Data;
+﻿using LocalNewsApi.Data;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +8,17 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
+        private readonly LocalNewsContext _context;
+
+        public ArticleController(LocalNewsContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet("{id:int}")]
         public Article GetArticle(int id)
         {
-            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
-
-            return articleContext.Articles.Find(id);
+            return _context.Articles.Find(id);
         }
     }
 }

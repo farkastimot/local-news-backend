@@ -10,13 +10,19 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class TopController : ControllerBase
     {
+        private readonly LocalNewsContext _context;
+
+        public TopController(LocalNewsContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IEnumerable<Article> GetTop(int? category, int? page, int? amount)
         {
-            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
             if (page == null) page = 0;
             if (amount == null) amount = 10;
-            return articleContext.Articles.Where(x => x.Category == category).Skip((int)page * (int)amount).Take((int)amount);
+            return _context.Articles.Where(x => x.Category == category).Skip((int)page * (int)amount).Take((int)amount);
         }
     }
 }
