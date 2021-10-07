@@ -2,17 +2,10 @@ using LocalNewsApi.Data;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LocalNewsApi
 {
@@ -40,8 +33,12 @@ namespace LocalNewsApi
                                   });
             });
 
-            services.AddControllers();
 
+            services.AddScoped<IArticleRepository, SqlArticleRepository>();
+            services.AddScoped<ICategoryRepository, SqlCategoryRepository>();
+            services.AddScoped<ISearchRepository, SqlSearchRepository>();
+            services.AddScoped<ITopRepository, SqlTopRepository>();
+            services.AddControllers();
             services.AddDbContextPool<LocalNewsContext>(
                 options => options.UseSqlServer(_config.GetConnectionString("DefaultConnection")));
         }
