@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using LocalNewsApi.Data;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,13 +8,17 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class TopController : ControllerBase
     {
+        private readonly ITopRepository _repo;
+
+        public TopController(ITopRepository repo)
+        {
+            _repo = repo;
+        }
+
         [HttpGet]
         public IEnumerable<Article> GetTop(int? category, int? page, int? amount)
         {
-            LocalNewsContext articleContext = HttpContext.RequestServices.GetService(typeof(LocalNewsContext)) as LocalNewsContext;
-            if (page == null) page = 0;
-            if (amount == null) amount = 10;
-            return articleContext.Articles.Where(x => x.Category == category).Skip((int)page * (int)amount).Take((int)amount);
+            return _repo.GetTop(category, page, amount);
         }
     }
 }
