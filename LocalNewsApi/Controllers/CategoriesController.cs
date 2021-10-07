@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using LocalNewsApi.Data;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,23 +8,23 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class CategoriesController : ControllerBase
     {
-        private readonly LocalNewsContext _context;
+        private readonly ICategoryRepository _repo;
 
-        public CategoriesController(LocalNewsContext context)
+        public CategoriesController(ICategoryRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         [HttpGet]
         public IEnumerable<Category> GetAll()
         {
-            return _context.Categories;
+            return _repo.GetAll();
         }
 
         [HttpGet("{id:int}")]
         public IEnumerable<Article> GetByID(int id)
         {
-            return _context.Articles.Where(x => x.Category == id);
+            return _repo.GetByID(id);
         }
     }
 }

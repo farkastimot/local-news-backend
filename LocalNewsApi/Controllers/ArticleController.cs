@@ -1,4 +1,4 @@
-﻿using LocalNewsApi.Data;
+﻿using System.Collections.Generic;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,17 +8,23 @@ namespace LocalNewsApi.Controllers
     [Route("[controller]")]
     public class ArticleController : ControllerBase
     {
-        private readonly LocalNewsContext _context;
+        private readonly IArticleRepository _repo;
 
-        public ArticleController(LocalNewsContext context)
+        public ArticleController(IArticleRepository repo)
         {
-            _context = context;
+            _repo = repo;
+        }
+
+        [HttpGet]
+        public IEnumerable<Article> GetAllArticles()
+        {
+            return _repo.GetAllArticles();
         }
 
         [HttpGet("{id:int}")]
         public Article GetArticle(int id)
         {
-            return _context.Articles.Find(id);
+            return _repo.GetArticle(id);
         }
     }
 }

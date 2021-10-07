@@ -5,7 +5,7 @@ namespace LocalNewsApi.Data
 {
     public class LocalNewsContext : DbContext
     {
-        public LocalNewsContext(DbContextOptions<LocalNewsContext> options): base(options)
+        public LocalNewsContext(DbContextOptions options) : base(options)
         {
 
         }
