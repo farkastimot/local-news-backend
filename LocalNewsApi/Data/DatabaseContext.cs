@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
 namespace LocalNewsApi.Models
@@ -21,7 +19,7 @@ namespace LocalNewsApi.Models
         }
 
         // --------------------------------------------------------------------------------------------------------------- ARTICLES
-        public List<Article> GetArticles(string searchTerm, int category, int page, bool top = false, int amount=10, bool all=false)
+        public List<Article> GetArticles(string searchTerm, int category, int page, bool top = false, int amount = 10, bool all = false)
         {
             List<Article> articles = new List<Article>();
 
@@ -35,11 +33,11 @@ namespace LocalNewsApi.Models
                 //if we need the top articles only select from the last 7 days
                 if (top) sqlCommand += "TIMESTAMPDIFF(DAY,`publishedAt`, now()) < 30";
                 //If we need to add a category, add a category
-                if (category != 0) sqlCommand += (top?" AND ":" ") + "`category` = @Category ";
+                if (category != 0) sqlCommand += (top ? " AND " : " ") + "`category` = @Category ";
                 //Search if we have a search term (in title, description and content)
                 if (searchTerm != "") sqlCommand += (top || category != 0 ? " AND " : " ") + " (title LIKE @TitleSearch) OR (description LIKE @DescSearch) OR (content LIKE @ContentSearch) ";
                 //Add the limit (all the time)
-                sqlCommand += (searchTerm!=""?"": " ORDER BY `publishedAt` DESC ") + " LIMIT @Limit ";
+                sqlCommand += (searchTerm != "" ? "" : " ORDER BY `publishedAt` DESC ") + " LIMIT @Limit ";
                 if (page != 0) sqlCommand += " OFFSET " + (page * 10).ToString() + " ";
                 sqlCommand += ";";
                 //JUST GET IT ALL INSTEAD
@@ -49,7 +47,7 @@ namespace LocalNewsApi.Models
                 if (category != 0) cmd.Parameters.AddWithValue("@Category", category);
                 if (searchTerm != "")
                 {
-                    cmd.Parameters.AddWithValue("@TitleSearch", "%"+searchTerm+"%");
+                    cmd.Parameters.AddWithValue("@TitleSearch", "%" + searchTerm + "%");
                     cmd.Parameters.AddWithValue("@DescSearch", "%" + searchTerm + "%");
                     cmd.Parameters.AddWithValue("@ContentSearch", "%" + searchTerm + "%");
                 }
@@ -116,7 +114,7 @@ namespace LocalNewsApi.Models
         }
 
         // --------------------------------------------------------------------------------------------------------------- CATEGORIES
-        public List<Category> GetCategories(int id=0)
+        public List<Category> GetCategories(int id = 0)
         {
             List<Category> categories = new List<Category>();
 
