@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LocalNewsApi.Controllers;
 using LocalNewsApi.Data;
+using LocalNewsApi.Models;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -19,7 +20,8 @@ namespace LocalNewsApiTest
         public void Search_ShouldReturnAllArticles()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new SearchController(context);
+            SqlSearchRepository repo = new SqlSearchRepository(context);
+            var controller = new SearchController(repo);
             var articles = controller.Search("Civ", null, null).ToList();
 
             Assert.AreEqual(1, articles.Count);
@@ -29,7 +31,8 @@ namespace LocalNewsApiTest
         public void Search_ShouldReturnCorrectArticles()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new SearchController(context);
+            SqlSearchRepository repo = new SqlSearchRepository(context);
+            var controller = new SearchController(repo);
             var articles = controller.Search("Civ", null, null).ToList();
 
             Assert.AreEqual("Magyar György: Karácsony és Márki-Zay nem írhatja át a játékszabályokat - Index.hu", articles[0].Title);

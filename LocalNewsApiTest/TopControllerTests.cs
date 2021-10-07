@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LocalNewsApi.Controllers;
 using LocalNewsApi.Data;
+using LocalNewsApi.Models;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -19,7 +20,8 @@ namespace LocalNewsApiTest
         public void GetTop_ShouldReturnAllArticles()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new TopController(context);
+            SqlTopRepository repo = new SqlTopRepository(context);
+            var controller = new TopController(repo);
             var articles = controller.GetTop(7, null, null).ToList();
 
             Assert.AreEqual(1, articles.Count);
@@ -29,7 +31,8 @@ namespace LocalNewsApiTest
         public void GetTop_ShouldReturnCorrectArticles()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new TopController(context);
+            SqlTopRepository repo = new SqlTopRepository(context);
+            var controller = new TopController(repo);
             var articles = controller.GetTop(7, null, null).ToList();
 
             Assert.AreEqual("Title4", articles[0].Title);

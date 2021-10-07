@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LocalNewsApi.Controllers;
 using LocalNewsApi.Data;
+using LocalNewsApi.Models;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -19,7 +20,8 @@ namespace LocalNewsApiTest
         public void GetAll_ShouldReturnAllCategories()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new CategoriesController(context);
+            SqlCategoryRepository repo = new SqlCategoryRepository(context);
+            var controller = new CategoriesController(repo);
             var categories = controller.GetAll().ToList();
 
             Assert.AreEqual(7, categories.Count);
@@ -29,7 +31,8 @@ namespace LocalNewsApiTest
         public void GetAll_ShouldReturnCorrectCategories()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new CategoriesController(context);
+            SqlCategoryRepository repo = new SqlCategoryRepository(context);
+            var controller = new CategoriesController(repo);
             var categories = controller.GetAll().ToList();
 
             Assert.AreEqual("Category2", categories[6].Name);
@@ -39,7 +42,8 @@ namespace LocalNewsApiTest
         public void GetByID_ShouldReturnAllArticlesByCategoryId()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new CategoriesController(context);
+            SqlCategoryRepository repo = new SqlCategoryRepository(context);
+            var controller = new CategoriesController(repo);
             var articles = controller.GetByID(7).ToList();
 
             Assert.AreEqual(1, articles.Count);
@@ -49,7 +53,8 @@ namespace LocalNewsApiTest
         public void GetByID_ShouldReturnCorrectArticles()
         {
             using LocalNewsContext context = new LocalNewsContext(ContextOptions);
-            var controller = new CategoriesController(context);
+            SqlCategoryRepository repo = new SqlCategoryRepository(context);
+            var controller = new CategoriesController(repo);
             var articles = controller.GetByID(7).ToList();
 
             Assert.AreEqual("Title4", articles[0].Title);
