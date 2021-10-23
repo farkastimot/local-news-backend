@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using LocalNewsApi.Data;
 
 namespace LocalNewsApi.Models
@@ -12,7 +12,7 @@ namespace LocalNewsApi.Models
             _context = context;
         }
 
-        public IEnumerable<Article> GetAllArticles()
+        public IQueryable<Article> GetAllArticles()
         {
             return _context.Articles;
         }

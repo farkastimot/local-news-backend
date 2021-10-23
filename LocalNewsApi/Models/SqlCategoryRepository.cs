@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using LocalNewsApi.Data;
 
 namespace LocalNewsApi.Models
@@ -13,12 +12,12 @@ namespace LocalNewsApi.Models
             _context = context;
         }
 
-        public IEnumerable<Category> GetAll()
+        public IQueryable<Category> GetAll()
         {
             return _context.Categories;
         }
 
-        public IEnumerable<Article> GetByID(int id)
+        public IQueryable<Article> GetByID(int id)
         {
             return _context.Articles.Where(x => x.Category == id);
         }

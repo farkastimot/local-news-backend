@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ namespace LocalNewsApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Article> GetAllArticles()
+        public IQueryable<Article> GetAllArticles()
         {
             return _repo.GetAllArticles();
         }

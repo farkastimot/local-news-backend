@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ namespace LocalNewsApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Article> GetTop(int? category, int? page, int? amount)
+        public IQueryable<Article> GetTop(int? category, int? page, int? amount)
         {
             return _repo.GetTop(category, page, amount);
         }
