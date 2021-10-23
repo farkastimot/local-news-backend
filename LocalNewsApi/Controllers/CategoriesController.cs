@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using LocalNewsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,13 +16,13 @@ namespace LocalNewsApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Category> GetAll()
+        public IQueryable<Category> GetAll()
         {
             return _repo.GetAll();
         }
 
         [HttpGet("{id:int}")]
-        public IEnumerable<Article> GetByID(int id)
+        public IQueryable<Article> GetByID(int id)
         {
             return _repo.GetByID(id);
         }

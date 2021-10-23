@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace LocalNewsApi.Models
 {
     public interface ISearchRepository
     {
-        public IEnumerable<Article> Search(string q, int? page, int? amount);
+        public IQueryable<Article> Search(string q, int? page, int? amount);
     }
 }

@@ -13,7 +13,7 @@ namespace LocalNewsApi.Models
             _context = context;
         }
 
-        public IEnumerable<Article> Search(string q, int? page, int? amount)
+        public IQueryable<Article> Search(string q, int? page, int? amount)
         {
             if (page == null) page = 0;
             if (amount == null) amount = 10;

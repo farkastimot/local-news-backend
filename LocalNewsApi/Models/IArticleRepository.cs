@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace LocalNewsApi.Models
 {
     public interface IArticleRepository
     {
         public Article GetArticle(int Id);
-        public IEnumerable<Article> GetAllArticles();
+        public IQueryable<Article> GetAllArticles();
     }
 }

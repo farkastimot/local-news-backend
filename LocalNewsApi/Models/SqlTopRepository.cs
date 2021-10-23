@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using LocalNewsApi.Data;
 
 namespace LocalNewsApi.Models
@@ -12,7 +11,7 @@ namespace LocalNewsApi.Models
         {
             _context = context;
         }
-        public IEnumerable<Article> GetTop(int? category, int? page, int? amount)
+        public IQueryable<Article> GetTop(int? category, int? page, int? amount)
         {
             if (page == null) page = 0;
             if (amount == null) amount = 10;
